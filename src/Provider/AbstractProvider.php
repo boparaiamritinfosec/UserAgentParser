@@ -1,9 +1,8 @@
 <?php
 namespace UserAgentParser\Provider;
 
+use Composer\InstalledVersions;
 use DateTime;
-use PackageInfo\Exception\PackageNotInstalledException;
-use PackageInfo\Package;
 use UserAgentParser\Exception;
 use UserAgentParser\Exception\PackageNotLoadedException;
 use UserAgentParser\Model;
@@ -122,13 +121,13 @@ abstract class AbstractProvider
      */
     public function getVersion()
     {
-        try {
-            $package = new Package($this->getPackageName());
+        $packageName = $this->getPackageName();
 
-            return $package->getVersion();
-        } catch (PackageNotInstalledException $ex) {
-            return;
+        if ($packageName && class_exists(InstalledVersions::class) && InstalledVersions::isInstalled($packageName)) {
+            return InstalledVersions::getPrettyVersion($packageName);
         }
+
+        return;
     }
 
     /**
@@ -138,13 +137,15 @@ abstract class AbstractProvider
      */
     public function getUpdateDate()
     {
-        try {
-            $package = new Package($this->getPackageName());
+        $packageName = $this->getPackageName();
 
-            return $package->getVersionReleaseDate();
-        } catch (PackageNotInstalledException $ex) {
-            return;
+        if ($packageName && class_exists(InstalledVersions::class) && InstalledVersions::isInstalled($packageName)) {
+            $reference = InstalledVersions::getReference($packageName);
+
+            return $reference ? new DateTime() : null;
         }
+
+        return;
     }
 
     /**
@@ -163,8 +164,15 @@ abstract class AbstractProvider
      */
     protected function checkIfInstalled()
     {
-        if (! Package::isInstalled($this->getPackageName())) {
-            throw new PackageNotLoadedException('You need to install the package ' . $this->getPackageName() . ' to use this provider');
+        $packageName = $this->getPackageName();
+        $installed = false;
+
+        if ($packageName && class_exists(InstalledVersions::class)) {
+            $installed = InstalledVersions::isInstalled($packageName);
+        }
+
+        if (! $installed) {
+            throw new PackageNotLoadedException('You need to install the package ' . $packageName . ' to use this provider');
         }
     }
 
