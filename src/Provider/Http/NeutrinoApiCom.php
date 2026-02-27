@@ -144,7 +144,7 @@ class NeutrinoApiCom extends AbstractHttpProvider
             $prevEx = $ex->getPrevious();
 
             if ($prevEx->hasResponse() === true && $prevEx->getResponse()->getStatusCode() === 403) {
-                throw new Exception\InvalidCredentialsException('Your API userId "' . $this->apiUserId . '" and key "' . $this->apiKey . '" is not valid for ' . $this->getName(), null, $ex);
+                throw new Exception\InvalidCredentialsException('Invalid API credentials for ' . $this->getName(), null, $ex);
             }
 
             throw $ex;
@@ -171,7 +171,7 @@ class NeutrinoApiCom extends AbstractHttpProvider
                     break;
 
                 case 2:
-                    throw new Exception\LimitationExceededException('Exceeded the maximum number of request with API userId "' . $this->apiUserId . '" and key "' . $this->apiKey . '" for ' . $this->getName());
+                    throw new Exception\LimitationExceededException('Exceeded the maximum number of requests for ' . $this->getName());
                     break;
 
                 default:

@@ -117,7 +117,7 @@ class UserAgentApiCom extends AbstractHttpProvider
                  * Error
                  */
                 if (isset($content->error->code) && $content->error->code == 'key_invalid') {
-                    throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName(), null, $ex);
+                    throw new Exception\InvalidCredentialsException('Invalid API credentials for ' . $this->getName(), null, $ex);
                 }
 
                 if (isset($content->error->code) && $content->error->code == 'useragent_invalid') {

@@ -94,7 +94,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
         ],
     ];
 
-    private static $uri = 'http://api.whatismybrowser.com/api/v1/user_agent_parse';
+    private static $uri = 'https://api.whatismybrowser.com/api/v1/user_agent_parse';
 
     private $apiKey;
 
@@ -158,7 +158,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
          * Limit exceeded
          */
         if (isset($content->message_code) && $content->message_code == 'usage_limit_exceeded') {
-            throw new Exception\LimitationExceededException('Exceeded the maximum number of request with API key "' . $this->apiKey . '" for ' . $this->getName());
+            throw new Exception\LimitationExceededException('Exceeded the maximum number of requests for ' . $this->getName());
         }
 
         /*
@@ -169,7 +169,7 @@ class WhatIsMyBrowserCom extends AbstractHttpProvider
         }
 
         if (isset($content->message_code) && $content->message_code == 'user_key_invalid') {
-            throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName());
+            throw new Exception\InvalidCredentialsException('Invalid API credentials for ' . $this->getName());
         }
 
         if (! isset($content->result) || $content->result !== 'success') {

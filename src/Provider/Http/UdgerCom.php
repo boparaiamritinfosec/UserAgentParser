@@ -68,7 +68,7 @@ class UdgerCom extends AbstractHttpProvider
         ],
     ];
 
-    private static $uri = 'http://api.udger.com/parse';
+    private static $uri = 'https://api.udger.com/parse';
 
     private $apiKey;
 
@@ -134,11 +134,11 @@ class UdgerCom extends AbstractHttpProvider
          * Errors
          */
         if (isset($content->flag) && $content->flag == 4) {
-            throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName());
+            throw new Exception\InvalidCredentialsException('Invalid API credentials for ' . $this->getName());
         }
 
         if (isset($content->flag) && $content->flag == 6) {
-            throw new Exception\LimitationExceededException('Exceeded the maximum number of request with API key "' . $this->apiKey . '" for ' . $this->getName());
+            throw new Exception\LimitationExceededException('Exceeded the maximum number of requests for ' . $this->getName());
         }
 
         if (isset($content->flag) && $content->flag > 3) {

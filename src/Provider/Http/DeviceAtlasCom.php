@@ -62,7 +62,7 @@ class DeviceAtlasCom extends AbstractHttpProvider
         ],
     ];
 
-    private static $uri = 'http://region0.deviceatlascloud.com/v1/detect/properties';
+    private static $uri = 'https://region0.deviceatlascloud.com/v1/detect/properties';
 
     private $apiKey;
 
@@ -106,7 +106,7 @@ class DeviceAtlasCom extends AbstractHttpProvider
             $prevEx = $ex->getPrevious();
 
             if ($prevEx->hasResponse() === true && $prevEx->getResponse()->getStatusCode() === 403) {
-                throw new Exception\InvalidCredentialsException('Your API key "' . $this->apiKey . '" is not valid for ' . $this->getName(), null, $ex);
+                throw new Exception\InvalidCredentialsException('Invalid API credentials for ' . $this->getName(), null, $ex);
             }
 
             throw $ex;
